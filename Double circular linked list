@@ -1,0 +1,86 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+typedef struct node {
+    struct node *L;
+    int data;
+    struct node *R;
+}node;
+node *head=NULL;
+
+node *getnode(){
+    struct node *temp =(struct node*)malloc(sizeof(struct node));
+    return temp;
+}
+void insrt(int a){
+    node *t = getnode();
+    t->data = a;
+    if(head == NULL){
+        head = t;
+        t->R = head;
+        t->L = head;
+      }
+    else{
+      t->L = head->L;
+      t->R = head;
+      t->R->L = t;
+      t->L->R = t;
+      head = t;
+    }
+}
+void ine(int b){
+  node *t = getnode(),*temp=head;
+  t->data = b;
+  if(head == NULL){
+        head = t;
+        t->R = head;
+        t->L = head;
+      }
+  else{
+      while(temp->R != head){
+          temp = temp->R;
+        }
+      temp->R = t;
+      t->L = temp;
+      t->R = head;
+      temp->L->L = t;
+    }
+}
+void inb(int c, int x){
+    struct node *t = getnode();
+    t->data = c;
+
+    if (head == NULL) {
+        t->L = head;
+        head = t;
+        t->R = head;
+    } 
+    else {
+        struct node *temp = head;
+        while (temp->data != x) {
+            temp = temp->R;
+        }
+        t->R = temp->R;
+        temp->R->L = t;
+        temp->R = t;
+        t->L = temp;
+    }
+}
+void dele(){
+    node *t = head;
+    node *temp = NULL;
+    t->R = head;
+    while(t->R != head){
+      temp = t;
+      t = t->R;
+    }
+    free(t);
+    t=temp;
+    temp->R=head;
+}
+main(){
+    
+    insrt(11);
+    ine(13);
+    inb(12,11);
+}
