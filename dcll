@@ -1,0 +1,130 @@
+#include<stdio.h>
+#include<stdlib.h>
+//Function to create a doublly linked node
+typedef struct node {
+	struct node *L,*R;
+	int data;
+}node;
+node *head = NULL;
+
+node *getnode(){
+    struct node *temp =(struct node*)malloc(sizeof(struct node));
+    return temp;
+}
+void insert_from_start(int a){
+	node *p = getnode();
+	p->data = a;
+	if(head == NULL){
+		head = p;
+		p->R = p->L = head;
+	}	
+	else{
+		p->L = head->L;
+		p->R = head;
+		head->L = p;
+		head = p;
+	}
+}
+void insert_from_end(int b){
+	node *p = getnode();
+	p->data = b;
+	if(head == NULL){
+		head = p;
+		p->L = p->R =head;
+	}
+	else{
+		head->L = p->L;
+		head->L->R = p;
+		p->R = head;
+		head->L = p;
+	}
+}
+void insert_from_between(int c,int x){
+	node *p = getnode(), *temp=head;
+	p->data = c;
+	if(head == NULL){
+		head = p;
+		p->L = p->R =head;
+	}
+	else{
+		while(temp->data != x){
+			temp = temp->R;
+			if(temp->R == head){
+				printf("element not found ");
+			}
+		}
+		p->R = temp->R;
+		p->L = temp;
+		temp->R->L = p;
+		temp->R = p;		
+	}
+}
+void del(int d){
+    node *p = head,*temp;
+      while(p->data != d){
+        if(p->R == head){
+            printf("element not found ");
+            break;
+          }
+        p = p->R;
+        if(p == head && p->data == d){
+        	p->L->R = p->R;
+        	p->R->L = p->L;
+        	head = p->R;
+        	free(p);
+        }
+      }
+      if(p->data == d){
+      p->L->R = p->R;
+      p->R->L = p->L;
+      free(p);
+    }
+}
+void display() {
+    if (head == NULL) {
+        printf("List is empty\n");
+    } else {
+        struct node *temp = head;
+        printf("\nList elements are: ");
+        while (temp->R != head) {
+            printf("%d\t", temp->data);
+            temp = temp->R;
+        }
+        printf("%d\t", temp->data);
+    }
+}
+main(){
+	char x,y;
+	int a;
+	while(1){
+		printf("***MENU***\n1. Insert from start\n2. Insert from between\n3. Insert from end\n4. Delete a particular node\n5. Display\n6. exit\n");
+		scanf("%d",&a);
+		switch(a){
+			case 1:
+				printf("Enter the element you want to insert");
+				scanf("%d",x);
+				insert_from_start(x);
+				break;
+			case 2:
+				printf("Enter the element you want to insert");
+				scanf("%d%d",&x,&y);
+				insert_from_between(x,y);
+				break;
+			case 3:
+				printf("Enter the element you want to insert");
+				scanf("%d",x);
+				insert_from_end(x);
+				break;
+			case 4:
+				printf("which node you want to delete(data)");
+				scanf("%d",y);
+				del(y);
+				break;
+			case 5:
+				display();
+				break;
+			case 6: exit(0);
+				break;
+		}
+	}
+}
